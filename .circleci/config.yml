@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs: 
+  aws-ecr: circleci/aws-ecr@6.15.3
 jobs:
   build:
     working_directory: ~/league-matchmaking-frontend
@@ -30,3 +32,12 @@ jobs:
       # - store_artifacts:
       #     path: tslint.xml
       #     prefix: lint
+
+workflows:
+  build_and_push_image:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          context: common
+          create-repo: true
+          repo: circleci-league-matchmaking-frontend
+          tag: "$CIRCLE_SHA1"
